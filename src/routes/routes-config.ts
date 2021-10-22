@@ -1,3 +1,4 @@
+import { handleError } from '../global/error';
 import Controller from '../controllers/controller';
 import { NextFunction, Request, Response, Router } from 'express';
 
@@ -19,7 +20,7 @@ export default abstract class RoutesConfig {
   }
 
   handleRequest(controller: ControllerFunction) {
-    return async function (req: Request, res: Response) {
+    return async (req: Request, res: Response) => {
       try {
         const { data, message } = await controller(req, res);
         const response = {
@@ -30,28 +31,14 @@ export default abstract class RoutesConfig {
 
         return res.status(200).json(response);
       } catch (err) {
-        let response: ErrorResponse = {};
-        response.name = 'INTERNAL_SERVER';
-        response.status = false;
-
-        let statusCode: ErrorHttpStatusCode = 500;
-
-        if (err instanceof BaseError) {
-          response.name = err.name;
-          response.message = err.message;
-          statusCode = err.httpCode;
-        } else if (err instanceof Error) {
-          response.message = err.message;
-        } else {
-          response.message = 'Something went wrong';
-        }
+        const { statusCode, response } = handleError(err);
 
         return res.status(statusCode).json(response);
       }
     };
   }
 
-  initialize() {}
+  abstract initialize(): void;
 
   abstract configureRoutes(): Router;
 }

@@ -11,13 +11,12 @@ const { port, apiPath, databaseUrl } = getEnvVariables();
 
 new Database(databaseUrl).connect();
 
-const app = new App(port, apiPath!);
+const app = new App(port, apiPath!, Routes.getRoutes());
 const expressApp = app.getApp();
 
 expressApp.use(cors());
 expressApp.use(json());
 expressApp.use(helmet());
 expressApp.use(morgan('dev'));
-Routes.setRoutes(expressApp, '/api');
 
 app.listen();

@@ -4,7 +4,7 @@ dotEnv.config();
 
 function normalizePort() {
   const port = process.env.PORT || '';
-  const normalPort = parseInt(port);
+  const normalPort = parseInt(port, 10);
   if (isNaN(normalPort)) {
     return false;
   }
@@ -26,9 +26,17 @@ export default function getEnvVariables(): EnvironmentVariables {
     apiPath = '/api';
   }
 
+  const jwtToken = process.env.JWT_TOKEN;
+
+  if (!jwtToken) {
+    console.log(`Invalid jwt token`);
+    process.exit(1);
+  }
+
   return {
     port,
     apiPath,
+    jwtToken,
     databaseUrl,
   };
 }
