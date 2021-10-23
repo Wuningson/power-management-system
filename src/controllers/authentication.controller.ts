@@ -19,7 +19,7 @@ export default class AuthenticationController extends Controller {
   public async userLogin(
     req: Request<{}, {}, UserLoginPayload>,
     res: Response
-  ) {
+  ): Promise<ControllerResult> {
     const schema = Joi.object<UserLoginPayload>({
       userId: Joi.string().required(),
       password: Joi.string().required(),
