@@ -1,4 +1,12 @@
 // Error Handling class using code from https://www.toptal.com/nodejs/node-js-error-handling
+// I'll have to think of something to fix the issues of httpCode trying to access enum that wasn't imported into this file
+enum ErrorHttpStatusCode {
+  NOT_FOUND = 404,
+  FORBIDDEN = 403,
+  BAD_REQUEST = 400,
+  UNAUTHORIZED = 401,
+  INTERNAL_SERVER = 500,
+}
 
 export default class BaseError extends Error {
   public readonly name: ErrorName;

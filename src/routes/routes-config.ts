@@ -31,6 +31,7 @@ export default abstract class RoutesConfig {
 
         return res.status(200).json(response);
       } catch (err) {
+        console.log(err);
         const { statusCode, response } = handleError(err);
 
         return res.status(statusCode).json(response);

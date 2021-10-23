@@ -1,9 +1,10 @@
 import mongoose from 'mongoose';
+import getEnvVariables from './env';
 
 export default class Database {
   private url: string;
-  constructor(databaseUrl: string) {
-    this.url = databaseUrl;
+  constructor() {
+    this.url = getEnvVariables().databaseUrl;
   }
   public async connect() {
     try {
