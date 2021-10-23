@@ -7,9 +7,9 @@ import { json } from 'express';
 import Database from './config/database';
 import getEnvVariables from './config/env';
 
-const { port, apiPath, databaseUrl } = getEnvVariables();
+const { port, apiPath } = getEnvVariables();
 
-new Database(databaseUrl).connect();
+new Database().connect();
 
 const app = new App(port, apiPath!, Routes.getRoutes());
 const expressApp = app.getApp();
@@ -18,5 +18,7 @@ expressApp.use(cors());
 expressApp.use(json());
 expressApp.use(helmet());
 expressApp.use(morgan('dev'));
+
+app.configureRoutes();
 
 app.listen();
