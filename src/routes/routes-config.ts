@@ -2,11 +2,7 @@ import { handleError } from '../global/error';
 import Controller from '../controllers/controller';
 import { NextFunction, Request, Response, Router } from 'express';
 
-type ControllerFunction = (
-  req: Request,
-  res: Response,
-  next?: NextFunction
-) => Promise<ControllerResult>;
+type ControllerFunction = (req: Request) => Promise<ControllerResult>;
 
 export default abstract class RoutesConfig {
   name: string;
@@ -22,7 +18,7 @@ export default abstract class RoutesConfig {
   handleRequest(controller: ControllerFunction) {
     return async (req: Request, res: Response) => {
       try {
-        const { data, message } = await controller(req, res);
+        const { data, message } = await controller(req);
         const response = {
           data,
           message,

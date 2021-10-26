@@ -1,11 +1,8 @@
 import Joi from 'joi';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import { Request } from 'express';
 import Controller from './controller';
 import { Utils } from '../utils/utils';
 import BaseError from '../global/error';
-import { Request, Response } from 'express';
-import getEnvVariables from '../config/env';
 import { AdminModel, EmployeeModel } from '../models';
 
 interface CreateAdminPayload
@@ -23,8 +20,7 @@ export default class AdminController extends Controller {
   }
 
   public async createAdmin(
-    req: Request<{}, {}, CreateAdminPayload>,
-    res: Response
+    req: Request<{}, {}, CreateAdminPayload>
   ): Promise<ControllerResult> {
     const schema = Joi.object({
       adminId: Joi.string().required(),
@@ -67,8 +63,7 @@ export default class AdminController extends Controller {
   }
 
   public async addNewEmployee(
-    req: Request<{}, {}, AddNewEmployeePayload>,
-    res: Response
+    req: Request<{}, {}, AddNewEmployeePayload>
   ): Promise<ControllerResult> {
     if (!req.admin) {
       throw new BaseError('FORBIDDEN', 'authorization failed');
