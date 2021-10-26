@@ -1,9 +1,9 @@
 import Joi from 'joi';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { Request } from 'express';
 import Controller from './controller';
 import BaseError from '../global/error';
-import { Request, Response } from 'express';
 import getEnvVariables from '../config/env';
 import { AdminModel, CustomerModel, EmployeeModel } from '../models';
 
@@ -17,8 +17,7 @@ export default class AuthenticationController extends Controller {
     super('Authentication');
   }
   public async userLogin(
-    req: Request<{}, {}, UserLoginPayload>,
-    res: Response
+    req: Request<{}, {}, UserLoginPayload>
   ): Promise<ControllerResult> {
     const schema = Joi.object<UserLoginPayload>({
       userId: Joi.string().required(),

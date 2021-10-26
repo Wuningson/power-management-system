@@ -1,9 +1,9 @@
 import Joi from 'joi';
+import { Request } from 'express';
 import Controller from './controller';
 import { Utils } from '../utils/utils';
 import BaseError from '../global/error';
 import { CustomerModel } from '../models';
-import { Request, Response } from 'express';
 
 interface AddNewCustomerPayload
   extends Pick<
@@ -23,8 +23,7 @@ export default class EmployeeController extends Controller {
   }
 
   public async addNewCustomer(
-    req: Request<{}, {}, AddNewCustomerPayload>,
-    res: Response
+    req: Request<{}, {}, AddNewCustomerPayload>
   ): Promise<ControllerResult> {
     if (!req.employee) {
       throw new BaseError('FORBIDDEN', 'authorization failed');
