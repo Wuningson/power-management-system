@@ -33,10 +33,26 @@ export default function getEnvVariables(): EnvironmentVariables {
     process.exit(1);
   }
 
+  const bigChainDbUrl = process.env.BIGCHAIN_DATABASE_URL;
+  if (!bigChainDbUrl) {
+    console.log(`Invalid bigchain database url`);
+    process.exit(1);
+  }
+
+  const publicKey = process.env.PUBLIC_KEY;
+  const privateKey = process.env.PRIVATE_KEY;
+  if (!publicKey || !privateKey) {
+    console.log(`Invalid bigchain database setup`);
+    process.exit(1);
+  }
+
   return {
     port,
     apiPath,
     jwtToken,
+    publicKey,
+    privateKey,
     databaseUrl,
+    bigChainDbUrl,
   };
 }
