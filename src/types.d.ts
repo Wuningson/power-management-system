@@ -8,7 +8,10 @@ interface EnvironmentVariables {
   port: number;
   jwtToken: string;
   apiPath?: string;
+  publicKey: string;
+  privateKey: string;
   databaseUrl: string;
+  bigChainDbUrl: string;
 }
 
 enum SuccessHttpStatusCode {
@@ -67,4 +70,44 @@ interface Customer {
   accountNo: string;
   middleName?: string;
   createdBy: string | EmployeeDocument;
+}
+interface BigChainBill {
+  rate: number;
+  createdAt: string;
+  createdBy: string;
+  unitsUsed: number;
+  customerId: string;
+  billingMonth: number;
+}
+
+interface Bill {
+  createdAt: Date;
+  customerId: string;
+  transactionId: string;
+  billingMonth: number;
+}
+
+interface Payment {
+  amount: number;
+  createdAt: Date;
+  customerId: string;
+  status: 'pending' | 'successful' | 'failed';
+}
+
+interface BigChainPayment extends Payment {
+  createdAt: string;
+  status: 'successful';
+}
+
+interface FetchQuery {
+  page?: string;
+  limit?: string;
+}
+
+interface BigChainPaymentReturn extends BigChainPayment {
+  createdAt: Date;
+}
+
+interface BillMetaData {
+  transactionId?: string;
 }
