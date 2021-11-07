@@ -33,9 +33,10 @@ export default function getEnvVariables(): EnvironmentVariables {
     process.exit(1);
   }
 
-  const bigChainDbUrl = process.env.BIGCHAIN_DATABASE_URL;
-  if (!bigChainDbUrl) {
-    console.log(`Invalid bigchain database url`);
+  const provenDbUrl = process.env.PROVEN_DB_URL;
+  const provenDbService = process.env.PROVEN_DB_SERVICE;
+  if (!provenDbUrl || !provenDbService) {
+    console.log(`Invalid proven db setup`);
     process.exit(1);
   }
 
@@ -53,6 +54,7 @@ export default function getEnvVariables(): EnvironmentVariables {
     publicKey,
     privateKey,
     databaseUrl,
-    bigChainDbUrl,
+    provenDbUrl,
+    provenDbService,
   };
 }
