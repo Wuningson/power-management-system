@@ -11,7 +11,8 @@ interface EnvironmentVariables {
   publicKey: string;
   privateKey: string;
   databaseUrl: string;
-  bigChainDbUrl: string;
+  provenDbUrl: string;
+  provenDbService: string;
 }
 
 enum SuccessHttpStatusCode {
@@ -110,4 +111,11 @@ interface BigChainPaymentReturn extends BigChainPayment {
 
 interface BillMetaData {
   transactionId?: string;
+}
+
+interface GetAccessTokenResponse {
+  token_type: string;
+  expires_in: number;
+  access_token: string;
+  refresh_token: string;
 }
