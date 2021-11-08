@@ -13,41 +13,56 @@ export default class BlockchainHelper {
     const databaseObject = client.db(provenDbService);
     const provendb = new ProvenDB(databaseObject);
 
-    return provendb;
+    return { provendb, databaseObject };
   }
 
   public static async storeAsset<T extends Record<string, any>>(
     data: T,
     model: string
   ) {
-    const provendb = await this.getProvenDbConnection();
+    const { provendb } = await this.getProvenDbConnection();
     const collection = provendb.collection(model);
-    const test = await collection.insertOne(data);
+    const test: { insertedId: string } = await collection.insertOne(data);
     await provendb.submitProof();
 
     return test;
   }
 
-  public static async fetchAssets(
-    filter: Record<string, string | number | Date>,
+  public static async fetchAssets<T>(
+    filter: Record<string, any>,
     model: string
-  ) {
-    const provendb = await this.getProvenDbConnection();
-    const collection = provendb.collection(model);
-    const result = (await collection.find(filter)).toArray();
+  ): Promise<T[]> {
+    const { databaseObject } = await this.getProvenDbConnection();
+
+    const result: T[] = await databaseObject
+      .collection(model)
+      .find(filter)
+      .toArray();
 
     return result;
   }
 
   public static async getProofStatus(id: string, model: string) {
-    const provendb = await this.getProvenDbConnection();
+    const { provendb } = await this.getProvenDbConnection();
     const { version } = await provendb.getVersion();
-    const { proofs } = await provendb.getDocumentProof(
-      model,
-      { _id: ObjectId(id) },
-      version
-    );
+    const { proofs }: { proofs: { status: ProofStatus }[] } =
+      await provendb.getDocumentProof(model, { _id: ObjectId(id) }, version);
 
     return proofs[0].status;
+  }
+
+  public static async updateAsset(
+    filter: Record<string, any>,
+    model: string,
+    body: Record<string, any>
+  ) {
+    const { databaseObject } = await this.getProvenDbConnection();
+
+    await databaseObject.collection(model).updateOne(filter, { $set: body });
+    const res: GetVersionResponse = await databaseObject.command({
+      getVersion: 1,
+    });
+
+    databaseObject.command({ submitProof: res.version });
   }
 }

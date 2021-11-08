@@ -72,20 +72,18 @@ interface Customer {
   middleName?: string;
   createdBy: string | EmployeeDocument;
 }
-interface BigChainBill {
+
+interface Bill {
   rate: number;
-  createdAt: string;
+  createdAt: Date;
   createdBy: string;
   unitsUsed: number;
   customerId: string;
   billingMonth: number;
 }
 
-interface Bill {
-  createdAt: Date;
-  customerId: string;
-  transactionId: string;
-  billingMonth: number;
+interface BlockChainBill extends Bill {
+  _id: string;
 }
 
 interface Payment {
@@ -100,6 +98,8 @@ interface BigChainPayment extends Payment {
   status: 'successful';
 }
 
+type ProofStatus = 'Pending' | 'Submitted' | 'Valid' | 'Unproven';
+
 interface FetchQuery {
   page?: string;
   limit?: string;
@@ -109,7 +109,7 @@ interface BigChainPaymentReturn extends BigChainPayment {
   createdAt: Date;
 }
 
-interface BillMetaData {
+interface BigChainMetaData {
   transactionId?: string;
 }
 
@@ -118,4 +118,20 @@ interface GetAccessTokenResponse {
   expires_in: number;
   access_token: string;
   refresh_token: string;
+}
+interface AddCustomerBillPayload
+  extends Pick<
+    BigChainBill,
+    'billingMonth' | 'rate' | 'unitsUsed' | 'customerId'
+  > {}
+
+interface FetchCustomerBillsPayload extends FetchQuery {
+  customerId?: string;
+}
+
+interface GetVersionResponse {
+  ok: number;
+  status: string;
+  version: number;
+  response: string;
 }
