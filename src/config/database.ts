@@ -14,8 +14,6 @@ export default class Database {
       });
 
       console.log(`Connected to database`);
-
-      mongoose.connection.on('disconnected', this.connect);
     } catch (error) {
       console.log(error);
       process.exit(1);
