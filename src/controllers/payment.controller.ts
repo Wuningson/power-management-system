@@ -104,7 +104,7 @@ export default class PaymentController extends Controller {
     };
   }
 
-  public async test(req: Request): Promise<ControllerResult> {
+  public async paymentCallback(req: Request): Promise<ControllerResult> {
     return {
       data: null,
       message: '',
@@ -136,7 +136,7 @@ export default class PaymentController extends Controller {
     }
 
     const payments = await BlockchainHelper.fetchAssets<BlockChainPayment>(
-      { customerId: ObjectId(customerId) },
+      { customerId },
       'payment'
     );
 

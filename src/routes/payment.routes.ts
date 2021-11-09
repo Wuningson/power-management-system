@@ -9,18 +9,23 @@ export default class PaymentRoutes extends RoutesConfig {
   }
 
   configureRoutes() {
-    this.router.post(
-      '/payment',
-      authenticateUser,
-      this.handleRequest(this.controller.generatePaymentLink)
-    );
+    this.router
+      .route('/payment')
+      .post(
+        authenticateUser,
+        this.handleRequest(this.controller.generatePaymentLink)
+      )
+      .get(this.handleRequest(this.controller.fetchUserPayments));
 
     this.router.post(
       '/webhook',
       this.handleRequest(this.controller.paymentWebhook)
     );
 
-    this.router.get('/test', this.handleRequest(this.controller.test));
+    this.router.get(
+      '/callback',
+      this.handleRequest(this.controller.paymentCallback)
+    );
     return this.router;
   }
 
