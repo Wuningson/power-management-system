@@ -40,10 +40,9 @@ export default function getEnvVariables(): EnvironmentVariables {
     process.exit(1);
   }
 
-  const publicKey = process.env.PUBLIC_KEY;
-  const privateKey = process.env.PRIVATE_KEY;
-  if (!publicKey || !privateKey) {
-    console.log(`Invalid bigchain database setup`);
+  const paystackSecret = process.env.SECRET_KEY;
+  if (!paystackSecret) {
+    console.log(`Invalid paystack setup`);
     process.exit(1);
   }
 
@@ -51,10 +50,9 @@ export default function getEnvVariables(): EnvironmentVariables {
     port,
     apiPath,
     jwtToken,
-    publicKey,
-    privateKey,
     databaseUrl,
     provenDbUrl,
+    paystackSecret,
     provenDbService,
   };
 }
