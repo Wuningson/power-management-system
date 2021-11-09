@@ -88,13 +88,13 @@ interface BlockChainBill extends Bill {
 interface Payment {
   amount: number;
   createdAt: Date;
+  reference: string;
   customerId: string;
-  status: 'pending' | 'successful' | 'failed';
+  status: 'successful';
 }
 
-interface BigChainPayment extends Payment {
-  createdAt: string;
-  status: 'successful';
+interface BlockChainPayment extends Payment {
+  _id: string;
 }
 
 type ProofStatus = 'Pending' | 'Submitted' | 'Valid' | 'Unproven';
@@ -162,7 +162,9 @@ interface VerifyTransaction {
   data: {
     amount: number;
     status: string;
-    metadata: string;
+    paidAt: string;
+    reference: string;
+    metadata: { userId: string };
   };
 }
 
@@ -175,4 +177,8 @@ interface GeneratePaymentLink {
 interface PaymentCallbackPayload {
   event: string;
   data: { reference: string };
+}
+
+interface FetchUserPaymentsPayload {
+  customerId?: string;
 }

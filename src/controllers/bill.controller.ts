@@ -1,14 +1,17 @@
 import Joi from 'joi';
 import { Request } from 'express';
+import { ObjectId } from 'mongodb';
 import Controller from './controller';
 import BaseError from '../global/error';
 import { LeanDocument } from 'mongoose';
-import { CustomerModel, EmployeeModel } from '../models';
 import BlockchainHelper from '../config/provendb';
-import { ObjectId } from 'mongodb';
+import { CustomerModel, EmployeeModel } from '../models';
 
 interface BlockchainBillReturn
-  extends Pick<Bill, 'rate' | 'unitsUsed' | 'billingMonth' | 'createdAt'> {
+  extends Pick<
+    BlockChainBill,
+    '_id' | 'rate' | 'unitsUsed' | 'billingMonth' | 'createdAt'
+  > {
   status: ProofStatus;
   createdBy: LeanDocument<EmployeeDocument>;
   customerId: LeanDocument<CustomerDocument>;
