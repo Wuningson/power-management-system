@@ -62,10 +62,10 @@ export default class PaymentController extends Controller {
     };
   }
 
-  public async paymentCallback(
+  public async paymentWebhook(
     req: Request<{}, {}, PaymentCallbackPayload>
   ): Promise<ControllerResult> {
-    var hash = crypto
+    const hash = crypto
       .createHmac('sha512', getEnvVariables().paystackSecret)
       .update(JSON.stringify(req.body))
       .digest('hex');
@@ -98,6 +98,13 @@ export default class PaymentController extends Controller {
       }
     }
 
+    return {
+      data: null,
+      message: '',
+    };
+  }
+
+  public async test(req: Request): Promise<ControllerResult> {
     return {
       data: null,
       message: '',
