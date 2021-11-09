@@ -4,9 +4,10 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "tsc && node dist/server.js",
+    "start": "node dist/server.js",
     "lint": "tslint --project ./",
-    "dev": "nodemon dist/server.js"
+    "dev": "nodemon dist/server.js",
+    "build": "tsc"
   },
   "dependencies": {
     "@southbanksoftware/provendb-node-driver": "^0.1.13",
