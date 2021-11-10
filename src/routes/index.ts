@@ -4,6 +4,7 @@ import RoutesConfig from './routes-config';
 import PaymentRoutes from './payment.routes';
 import EmployeeRoutes from './employee.routes';
 import AuthenticationRoutes from './authentication.routes';
+import CustomerRoutes from './customer.routes';
 
 export default class Routes {
   public static getRoutes(): RoutesConfig[] {
@@ -12,6 +13,7 @@ export default class Routes {
       new AdminRoutes(),
       new PaymentRoutes(),
       new EmployeeRoutes(),
+      new CustomerRoutes(),
       new AuthenticationRoutes(),
     ];
   }

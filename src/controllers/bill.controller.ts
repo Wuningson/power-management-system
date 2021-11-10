@@ -7,7 +7,7 @@ import { LeanDocument } from 'mongoose';
 import BlockchainHelper from '../config/provendb';
 import { CustomerModel, EmployeeModel } from '../models';
 
-interface BlockchainBillReturn
+export interface BlockchainBillReturn
   extends Pick<
     BlockChainBill,
     '_id' | 'rate' | 'unitsUsed' | 'billingMonth' | 'createdAt'

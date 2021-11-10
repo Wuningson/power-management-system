@@ -31,10 +31,11 @@ export default class AuthenticationController extends Controller {
     }
 
     const { userId, password } = req.body;
-    const user =
-      (await AdminModel.findOne({ adminId: userId })) ||
-      (await CustomerModel.findOne({ accountNo: userId })) ||
-      (await EmployeeModel.findOne({ employeeId: userId }));
+    const admin = await AdminModel.findOne({ adminId: userId });
+    const customer = await CustomerModel.findOne({ accountNo: userId });
+    const employee = await EmployeeModel.findOne({ employeeId: userId });
+
+    const user = admin || customer || employee;
 
     if (!user) {
       throw new BaseError('BAD_REQUEST', 'invalid user id');
@@ -53,9 +54,26 @@ export default class AuthenticationController extends Controller {
     const data = user.toObject();
     delete data.password;
 
+    const type = admin ? 'admin' : employee ? 'employee' : 'customer';
+
     return {
       data: {
+        type,
         token,
+        ...data,
+      },
+      message: 'authentication successful',
+    };
+  }
+
+  public async fetchAuthenticatedUser(req: Request): Promise<ControllerResult> {
+    const { admin, employee, customer } = req;
+    const type = admin ? 'admin' : employee ? 'employee' : 'customer';
+    const data = admin || employee || customer;
+
+    return {
+      data: {
+        type,
         ...data,
       },
       message: 'authentication successful',

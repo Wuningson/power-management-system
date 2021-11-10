@@ -1,4 +1,5 @@
 import RoutesConfig from './routes-config';
+import authenticateUser from '../middleware/authenticateUser';
 import AuthenticationController from '../controllers/authentication.controller';
 
 export default class AuthenticationRoutes extends RoutesConfig {
@@ -12,7 +13,13 @@ export default class AuthenticationRoutes extends RoutesConfig {
   }
 
   configureRoutes() {
-    this.router.post('/login', this.handleRequest(this.controller.userLogin));
+    this.router
+      .route('/auth')
+      .post(this.handleRequest(this.controller.userLogin))
+      .get(
+        authenticateUser,
+        this.handleRequest(this.controller.fetchAuthenticatedUser)
+      );
 
     return this.router;
   }
