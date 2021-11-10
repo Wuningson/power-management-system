@@ -63,6 +63,7 @@ interface Employee {
 interface Customer {
   address: string;
   createdAt: Date;
+  email?: string;
   meterNo: number;
   lastName: string;
   firstName: string;
@@ -179,6 +180,20 @@ interface PaymentCallbackPayload {
   data: { reference: string };
 }
 
-interface FetchUserPaymentsPayload {
+interface CustomerById {
   customerId?: string;
 }
+
+interface UpdateCustomerPayload
+  extends Partial<
+    Pick<
+      Customer,
+      | 'email'
+      | 'address'
+      | 'meterNo'
+      | 'lastName'
+      | 'firstName'
+      | 'accountNo'
+      | 'middleName'
+    >
+  > {}

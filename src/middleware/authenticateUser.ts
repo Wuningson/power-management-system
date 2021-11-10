@@ -32,21 +32,21 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     }
 
     const { userId } = decoded;
-    const customer = await CustomerModel.findById(userId);
+    const customer = await CustomerModel.findById(userId).select('-password');
     if (customer) {
-      req.customer = customer;
+      req.customer = customer.toObject();
       return next();
     }
 
-    const admin = await AdminModel.findById(userId);
+    const admin = await AdminModel.findById(userId).select('-password');
     if (admin) {
-      req.admin = admin;
+      req.admin = admin.toObject();
       return next();
     }
 
-    const employee = await EmployeeModel.findById(userId);
+    const employee = await EmployeeModel.findById(userId).select('-password');
     if (employee) {
-      req.employee = employee;
+      req.employee = employee.toObject();
       return next();
     }
 

@@ -15,6 +15,12 @@ export default class EmployeeRoutes extends RoutesConfig {
       this.handleRequest(this.controller.addNewCustomer)
     );
 
+    this.router.get(
+      '/employee/:employeeId',
+      authenticateUser,
+      this.handleRequest(this.controller.fetchEmployeeById)
+    );
+
     return this.router;
   }
 

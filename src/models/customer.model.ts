@@ -32,6 +32,11 @@ const CustomerSchema = new Schema({
     required: true,
     ref: 'Admin',
   },
+  email: {
+    type: String,
+    match:
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+  },
   createdAt: {
     type: Date,
     default: new Date().toISOString(),

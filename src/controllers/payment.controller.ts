@@ -1,7 +1,6 @@
 import Joi from 'joi';
 import crypto from 'crypto';
 import { Request } from 'express';
-import { ObjectId } from 'mongodb';
 import Controller from './controller';
 import BaseError from '../global/error';
 import randomstring from 'randomstring';
@@ -11,7 +10,7 @@ import getEnvVariables from '../config/env';
 import PaystackUtils from '../utils/paystack';
 import BlockchainHelper from '../config/provendb';
 
-interface BlockChainPaymentReturn
+export interface BlockChainPaymentReturn
   extends Pick<
     BlockChainPayment,
     '_id' | 'amount' | 'createdAt' | 'reference' | 'status'
@@ -112,12 +111,12 @@ export default class PaymentController extends Controller {
   }
 
   public async fetchUserPayments(
-    req: Request<{}, {}, FetchUserPaymentsPayload>
+    req: Request<{}, {}, CustomerById>
   ): Promise<ControllerResult> {
     const customerValidation = !req.customer
       ? Joi.string().required()
       : Joi.string().allow('');
-    const schema = Joi.object<FetchUserPaymentsPayload>({
+    const schema = Joi.object<CustomerById>({
       customerId: customerValidation,
     });
 

@@ -3,7 +3,7 @@ import { Request } from 'express';
 import Controller from './controller';
 import { Utils } from '../utils/utils';
 import BaseError from '../global/error';
-import { CustomerModel } from '../models';
+import { CustomerModel, EmployeeModel } from '../models';
 
 interface AddNewCustomerPayload
   extends Pick<
@@ -84,6 +84,25 @@ export default class EmployeeController extends Controller {
     return {
       data: null,
       message: 'new customer added successfully',
+    };
+  }
+
+  public async fetchEmployeeById(req: Request<{ employeeId?: string }>) {
+    if (!req.employee && !req.admin) {
+      throw new BaseError('FORBIDDEN', 'authorization failed');
+    }
+
+    const { employeeId } = req.params;
+    const employee = await EmployeeModel.findById(employeeId).select(
+      '-password'
+    );
+    if (!employee) {
+      throw new BaseError('BAD_REQUEST', 'invalid employee id');
+    }
+
+    return {
+      data: employee.toObject(),
+      message: 'customer fetched successfully',
     };
   }
 }
