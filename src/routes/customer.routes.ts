@@ -24,6 +24,13 @@ export default class CustomerRoutes extends RoutesConfig {
         this.handleRequest(this.controller.updateCustomerById)
       );
 
+    this.router
+      .route('/customer')
+      .get(
+        authenticateUser,
+        this.handleRequest(this.controller.fetchCustomers)
+      );
+
     return this.router;
   }
 }

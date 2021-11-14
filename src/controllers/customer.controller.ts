@@ -101,4 +101,48 @@ export default class CustomerController extends Controller {
       message: 'customer details updated successfully',
     };
   }
+
+  public async fetchCustomers(req: Request): Promise<ControllerResult> {
+    const customers = await CustomerModel.find({}).select('-password');
+    if (!customers) {
+      throw new BaseError('BAD_REQUEST', 'could not fetch customers');
+    }
+
+    const data = await Promise.all(
+      customers.map(async customer => {
+        const customerId = String(customer._id);
+        const payments =
+          await BlockchainHelper.fetchAssets<BlockChainPaymentReturn>(
+            { customerId },
+            'payment'
+          );
+        const bills = await BlockchainHelper.fetchAssets<BlockchainBillReturn>(
+          { customerId },
+          'bill'
+        );
+
+        const totalPayment = payments.reduce(
+          (acc, { amount }) => acc + amount,
+          0
+        );
+        const totalBill = bills.reduce(
+          (acc, { rate, unitsUsed }) => acc + rate * unitsUsed,
+          0
+        );
+
+        const res = customer.toObject();
+
+        return {
+          ...res,
+          totalBill,
+          totalPayment,
+        };
+      })
+    );
+
+    return {
+      data,
+      message: 'fetch ',
+    };
+  }
 }
