@@ -35,7 +35,7 @@ const CustomerSchema = new Schema({
   createdBy: {
     type: Types.ObjectId,
     required: true,
-    ref: 'Admin',
+    ref: 'Employee',
   },
   email: {
     type: String,
