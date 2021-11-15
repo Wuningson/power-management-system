@@ -103,7 +103,9 @@ export default class CustomerController extends Controller {
   }
 
   public async fetchCustomers(req: Request): Promise<ControllerResult> {
-    const customers = await CustomerModel.find({}).select('-password');
+    const customers = await CustomerModel.find({})
+      .select('-password')
+      .populate('createdBy');
     if (!customers) {
       throw new BaseError('BAD_REQUEST', 'could not fetch customers');
     }

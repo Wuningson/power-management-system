@@ -8,6 +8,7 @@ import { CustomerModel, EmployeeModel } from '../models';
 interface AddNewCustomerPayload
   extends Pick<
     Customer,
+    | 'email'
     | 'address'
     | 'meterNo'
     | 'lastName'
@@ -29,6 +30,7 @@ export default class EmployeeController extends Controller {
       throw new BaseError('FORBIDDEN', 'authorization failed');
     }
     const schema = Joi.object<AddNewCustomerPayload>({
+      email: Joi.string().required(),
       address: Joi.string().required(),
       meterNo: Joi.number().required(),
       lastName: Joi.string().required(),
@@ -45,6 +47,7 @@ export default class EmployeeController extends Controller {
     }
 
     const {
+      email,
       address,
       meterNo,
       lastName,
@@ -68,6 +71,7 @@ export default class EmployeeController extends Controller {
     const { _id } = req.employee;
 
     const customer = await CustomerModel.create({
+      email,
       address,
       meterNo,
       lastName,

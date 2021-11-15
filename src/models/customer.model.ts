@@ -18,6 +18,11 @@ const CustomerSchema = new Schema({
   middleName: {
     type: String,
   },
+  meterNo: {
+    type: String,
+    required: true,
+    unique: true,
+  },
   accountNo: {
     type: String,
     required: true,
@@ -36,6 +41,7 @@ const CustomerSchema = new Schema({
     type: String,
     match:
       /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    required: true,
   },
   createdAt: {
     type: Date,
