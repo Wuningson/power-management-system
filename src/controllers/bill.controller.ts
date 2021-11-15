@@ -104,7 +104,7 @@ export default class BillController extends Controller {
     }
 
     const { page, limit, customerId: id } = req.query;
-    const customerId: string = req.customer ? req.customer._id : id;
+    const customerId: string = String(req.customer ? req.customer._id : id);
 
     const customer = await CustomerModel.findById(customerId).select(
       '-password'
