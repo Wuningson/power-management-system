@@ -5,6 +5,7 @@ import BaseError from '../global/error';
 import { CustomerModel } from '../models';
 import BlockchainHelper from '../config/provendb';
 import { BlockchainBillReturn } from './bill.controller';
+import { Utils } from '../utils/utils';
 import { BlockChainPaymentReturn } from './payment.controller';
 
 export default class CustomerController extends Controller {
@@ -63,6 +64,7 @@ export default class CustomerController extends Controller {
       address: Joi.string().allow(''),
       meterNo: Joi.string().allow(''),
       lastName: Joi.string().allow(''),
+      password: Joi.string().allow(''),
       accountNo: Joi.string().allow(''),
       middleName: Joi.string().allow(''),
     });
@@ -88,10 +90,30 @@ export default class CustomerController extends Controller {
     }
 
     if (req.customer) {
-      const { firstName, lastName, middleName, email } = req.body;
+      const {
+        firstName,
+        lastName,
+        middleName,
+        email,
+        password: pword,
+      } = req.body;
+      let hashed;
+      if (pword) {
+        hashed = Utils.hashPassword(pword);
+      }
+      const body = {
+        firstName,
+        lastName,
+        middleName,
+        email,
+        password: pword,
+      };
+
+      const result = Utils.buildTruthyObject(body);
+
       customer = await CustomerModel.findByIdAndUpdate(
         customerId,
-        { firstName, lastName, middleName, email },
+        { ...result },
         { new: true }
       ).select('-password');
     }

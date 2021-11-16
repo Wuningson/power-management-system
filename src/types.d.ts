@@ -192,6 +192,7 @@ interface UpdateCustomerPayload
       | 'address'
       | 'meterNo'
       | 'lastName'
+      | 'password'
       | 'firstName'
       | 'accountNo'
       | 'middleName'
