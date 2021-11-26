@@ -5,6 +5,7 @@ import { Utils } from '../utils/utils';
 import BaseError from '../global/error';
 import { CustomerModel, EmployeeModel } from '../models';
 import BlockchainHelper from '../config/provendb';
+import randomstring from 'randomstring';
 
 interface AddNewCustomerPayload
   extends Pick<
@@ -13,7 +14,6 @@ interface AddNewCustomerPayload
     | 'address'
     | 'meterNo'
     | 'lastName'
-    | 'password'
     | 'firstName'
     | 'accountNo'
     | 'middleName'
@@ -35,7 +35,6 @@ export default class EmployeeController extends Controller {
       address: Joi.string().required(),
       meterNo: Joi.number().required(),
       lastName: Joi.string().required(),
-      password: Joi.string().required(),
       firstName: Joi.string().required(),
       accountNo: Joi.string().required(),
       middleName: Joi.string().allow(''),
@@ -52,7 +51,6 @@ export default class EmployeeController extends Controller {
       address,
       meterNo,
       lastName,
-      password,
       firstName,
       accountNo,
       middleName,
@@ -67,7 +65,9 @@ export default class EmployeeController extends Controller {
       throw new BaseError('BAD_REQUEST', 'meter no exists already');
     }
 
-    const hashedPassword = await Utils.hashPassword(password!);
+    const password = randomstring.generate(10);
+
+    const hashedPassword = await Utils.hashPassword(password);
 
     const { _id } = req.employee;
 
@@ -85,6 +85,8 @@ export default class EmployeeController extends Controller {
     if (!customer) {
       throw new BaseError('BAD_REQUEST', 'could not add new customer');
     }
+
+    Utils.sendWelcomeEmail(email!, firstName, accountNo, password, meterNo);
 
     return {
       data: null,

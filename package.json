@@ -10,6 +10,7 @@
     "build": "tsc"
   },
   "dependencies": {
+    "@sendgrid/mail": "^7.6.0",
     "@southbanksoftware/provendb-node-driver": "^0.1.13",
     "@types/randomstring": "^1.1.8",
     "axios": "^0.24.0",

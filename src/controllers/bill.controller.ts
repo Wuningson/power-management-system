@@ -6,6 +6,7 @@ import BaseError from '../global/error';
 import { LeanDocument } from 'mongoose';
 import BlockchainHelper from '../config/provendb';
 import { CustomerModel, EmployeeModel } from '../models';
+import { Utils } from '../utils/utils';
 
 export interface BlockchainBillReturn
   extends Pick<
@@ -73,6 +74,13 @@ export default class BillController extends Controller {
     };
 
     await BlockchainHelper.storeAsset(asset, 'bill');
+    Utils.sendBill(
+      customer.email!,
+      unitsUsed,
+      rate,
+      billingMonth,
+      customer.firstName
+    );
 
     return {
       data: null,

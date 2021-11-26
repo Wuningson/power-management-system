@@ -9,6 +9,7 @@ interface EnvironmentVariables {
   jwtToken: string;
   apiPath?: string;
   databaseUrl: string;
+  sendgridKey: string;
   provenDbUrl: string;
   paystackSecret: string;
   provenDbService: string;
