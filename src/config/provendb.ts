@@ -1,26 +1,25 @@
+import { ObjectId } from 'mongodb';
 import getEnvVariables from './env';
-import { MongoClient, ObjectId } from 'mongodb';
+import { provendbClient } from './database';
 import { Database as ProvenDB } from '@southbanksoftware/provendb-node-driver';
 
 export default class BlockchainHelper {
-  public static async getProvenDbConnection() {
-    const { provenDbUrl, provenDbService } = getEnvVariables();
+  public static getProvenDbConnection() {
+    const { provenDbService } = getEnvVariables();
 
-    const client = await MongoClient.connect(provenDbUrl, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    const databaseObject = client.db(provenDbService);
-    const provendb = new ProvenDB(databaseObject);
+    if (provendbClient) {
+      const databaseObject = provendbClient.db(provenDbService);
+      const provendb = new ProvenDB(databaseObject);
 
-    return { provendb, databaseObject };
+      return { provendb, databaseObject };
+    } else throw Error('Proven db wahala');
   }
 
   public static async storeAsset<T extends Record<string, any>>(
     data: T,
     model: string
   ) {
-    const { provendb } = await this.getProvenDbConnection();
+    const { provendb } = this.getProvenDbConnection();
     const collection = provendb.collection(model);
     const test: { insertedId: string } = await collection.insertOne(data);
     await provendb.submitProof();
@@ -32,7 +31,7 @@ export default class BlockchainHelper {
     filter: Record<string, any>,
     model: string
   ): Promise<T[]> {
-    const { databaseObject } = await this.getProvenDbConnection();
+    const { databaseObject } = this.getProvenDbConnection();
 
     const result: T[] = await databaseObject
       .collection(model)
@@ -43,7 +42,7 @@ export default class BlockchainHelper {
   }
 
   public static async getProofStatus(id: string, model: string) {
-    const { provendb } = await this.getProvenDbConnection();
+    const { provendb } = this.getProvenDbConnection();
     const { version } = await provendb.getVersion();
     const { proofs }: { proofs: { status: ProofStatus }[] } =
       await provendb.getDocumentProof(model, { _id: ObjectId(id) }, version);
@@ -56,7 +55,7 @@ export default class BlockchainHelper {
     model: string,
     body: Record<string, any>
   ) {
-    const { databaseObject } = await this.getProvenDbConnection();
+    const { databaseObject } = this.getProvenDbConnection();
 
     await databaseObject.collection(model).updateOne(filter, { $set: body });
     const res: GetVersionResponse = await databaseObject.command({

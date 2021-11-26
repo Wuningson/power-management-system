@@ -14,7 +14,7 @@ function normalizePort() {
 
 export default function getEnvVariables(): EnvironmentVariables {
   let apiPath = process.env.API_PATH;
-  const port = normalizePort() || 3000;
+  const port = normalizePort() || 8080;
 
   const databaseUrl = process.env.MONGO_URL;
   if (!databaseUrl) {

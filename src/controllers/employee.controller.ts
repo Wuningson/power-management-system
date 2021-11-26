@@ -4,6 +4,7 @@ import Controller from './controller';
 import { Utils } from '../utils/utils';
 import BaseError from '../global/error';
 import { CustomerModel, EmployeeModel } from '../models';
+import BlockchainHelper from '../config/provendb';
 
 interface AddNewCustomerPayload
   extends Pick<
@@ -107,6 +108,32 @@ export default class EmployeeController extends Controller {
     return {
       data: employee.toObject(),
       message: 'customer fetched successfully',
+    };
+  }
+
+  public async fetchDashboardData(req: Request) {
+    if (!req.employee) {
+      throw new BaseError('FORBIDDEN', 'authorization failed');
+    }
+
+    const payments = await BlockchainHelper.fetchAssets<BlockChainPayment>(
+      {},
+      'payment'
+    );
+    const bills = await BlockchainHelper.fetchAssets<BlockChainBill>(
+      {},
+      'bill'
+    );
+
+    const paymentsData = Utils.resolveByMonth(payments, 'createdAt');
+    const billsData = Utils.resolveByMonth(bills, 'createdAt');
+
+    return {
+      data: {
+        bills: billsData,
+        payments: paymentsData,
+      },
+      message: 'dashboard data fetched successfully',
     };
   }
 }

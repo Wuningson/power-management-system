@@ -16,6 +16,12 @@ export default class EmployeeRoutes extends RoutesConfig {
     );
 
     this.router.get(
+      '/employee/dashboard',
+      authenticateUser,
+      this.handleRequest(this.controller.fetchDashboardData)
+    );
+
+    this.router.get(
       '/employee/:employeeId',
       authenticateUser,
       this.handleRequest(this.controller.fetchEmployeeById)
