@@ -27,6 +27,7 @@ export default class EmployeeController extends Controller {
   public async addNewCustomer(
     req: Request<{}, {}, AddNewCustomerPayload>
   ): Promise<ControllerResult> {
+    console.log(req.employee);
     if (!req.employee) {
       throw new BaseError('FORBIDDEN', 'authorization failed');
     }
