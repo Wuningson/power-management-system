@@ -46,9 +46,10 @@ export default function getEnvVariables(): EnvironmentVariables {
     process.exit(1);
   }
 
-  const sendgridKey = process.env.SENDGRID_KEY;
-  if (!sendgridKey) {
-    console.log('Invalid mailing setup');
+  const userAuth = process.env.USER_AUTH;
+  const passwordAuth = process.env.PASSWORD_AUTH;
+  if (!userAuth || !passwordAuth) {
+    console.log(`Invalid mailing setup`);
     process.exit(1);
   }
 
@@ -56,9 +57,10 @@ export default function getEnvVariables(): EnvironmentVariables {
     port,
     apiPath,
     jwtToken,
-    sendgridKey,
+    userAuth,
     databaseUrl,
     provenDbUrl,
+    passwordAuth,
     paystackSecret,
     provenDbService,
   };

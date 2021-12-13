@@ -2,11 +2,11 @@ import Joi from 'joi';
 import { Request } from 'express';
 import { ObjectId } from 'mongodb';
 import Controller from './controller';
+import { Utils } from '../utils/utils';
 import BaseError from '../global/error';
 import { LeanDocument } from 'mongoose';
 import BlockchainHelper from '../config/provendb';
 import { CustomerModel, EmployeeModel } from '../models';
-import { Utils } from '../utils/utils';
 
 export interface BlockchainBillReturn
   extends Pick<
@@ -74,12 +74,16 @@ export default class BillController extends Controller {
     };
 
     await BlockchainHelper.storeAsset(asset, 'bill');
+
+    const { firstName, lastName, _id, email } = customer;
     Utils.sendBill(
-      customer.email!,
+      email!,
       unitsUsed,
       rate,
       billingMonth,
-      customer.firstName
+      firstName,
+      lastName,
+      _id
     );
 
     return {

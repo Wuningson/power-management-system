@@ -9,6 +9,7 @@ import { CustomerModel } from '../models';
 import getEnvVariables from '../config/env';
 import PaystackUtils from '../utils/paystack';
 import BlockchainHelper from '../config/provendb';
+import { Utils } from '../utils/utils';
 
 export interface BlockChainPaymentReturn
   extends Pick<
@@ -94,6 +95,17 @@ export default class PaymentController extends Controller {
         };
 
         await BlockchainHelper.storeAsset(asset, 'payment');
+
+        const user = await CustomerModel.findById(metadata.userId);
+
+        if (user) {
+          Utils.paymentReceived(
+            nairaValue,
+            user.firstName,
+            user.lastName,
+            user.email!
+          );
+        }
       }
     }
 

@@ -8,9 +8,10 @@ interface EnvironmentVariables {
   port: number;
   jwtToken: string;
   apiPath?: string;
+  userAuth: string;
   databaseUrl: string;
-  sendgridKey: string;
   provenDbUrl: string;
+  passwordAuth: string;
   paystackSecret: string;
   provenDbService: string;
 }

@@ -87,7 +87,7 @@ export default class EmployeeController extends Controller {
       throw new BaseError('BAD_REQUEST', 'could not add new customer');
     }
 
-    Utils.sendWelcomeEmail(email!, firstName, accountNo, password, meterNo);
+    Utils.sendWelcomeEmail(email!, firstName, accountNo, password);
 
     return {
       data: null,
