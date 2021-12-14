@@ -139,7 +139,7 @@ export default class BillController extends Controller {
     const data: BlockchainBillReturn[] = [];
     for (const bill of bills) {
       const status = await BlockchainHelper.getProofStatus(bill._id, 'bill');
-      if (status !== 'Valid' && !req.employee) {
+      if (!status || (status !== 'Valid' && !req.employee)) {
         continue;
       }
 

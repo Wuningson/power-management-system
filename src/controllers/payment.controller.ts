@@ -158,7 +158,7 @@ export default class PaymentController extends Controller {
         payment._id,
         'payment'
       );
-      if (status !== 'Valid' && !req.employee) {
+      if (!status || (status !== 'Valid' && !req.employee)) {
         continue;
       }
 
